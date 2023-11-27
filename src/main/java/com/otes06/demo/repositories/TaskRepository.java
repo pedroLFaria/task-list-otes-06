@@ -1,14 +1,12 @@
 package com.otes06.demo.repositories;
 
 import com.otes06.demo.dtos.TaskDto;
-import com.otes06.demo.dtos.TaskDto;
 import lombok.Data;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.scheduling.config.Task;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 
-import javax.management.AttributeNotFoundException;
-import java.net.HttpRetryException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,19 +14,25 @@ import java.util.stream.Collectors;
 
 
 @Data
+@Component
 public class TaskRepository {
 
     private Map<String, TaskDto> taskTable;
     private IdGenerator<TaskDto> idGenerator;
+    private UserRepository userRepository;
 
-    public TaskRepository(){
+
+    public TaskRepository(UserRepository userRepository){
         taskTable = new HashMap<>();
         idGenerator = new IdGenerator<>();
+        this.userRepository = userRepository;
     }
 
-    public String createTask(TaskDto TaskDto){
+    public String createTask(TaskDto newTask){
         String newTaskId = idGenerator.getRandomId(taskTable);
-        taskTable.put(newTaskId, TaskDto);
+        int maxId = taskTable.entrySet().stream().map(Map.Entry::getValue).filter(t -> t.getUserName().equals(newTask.getUserName())).max(Comparator.comparing(TaskDto::getPosition)).map(TaskDto::getPosition).orElse(0);
+        newTask.setPosition(maxId + 1);
+        taskTable.put(newTaskId, newTask);
         return newTaskId;
     }
     
@@ -49,8 +53,8 @@ public class TaskRepository {
         return taskDto;
     }
 
-    public List<TaskDto> getTaskByUserId(String userId) {
-        var maybeTasks = taskTable.values().stream().filter(taskDto -> taskDto.getUserId().equals(userId)).collect(Collectors.toList());
+    public List<TaskDto> getTaskByUserName(String userName) {
+        var maybeTasks = taskTable.values().stream().filter(taskDto -> taskDto.getUserName().equals(userName)).collect(Collectors.toList());
         if(maybeTasks.isEmpty()){
             throw new HttpServerErrorException(HttpStatusCode.valueOf(404), "Not found!");
         }

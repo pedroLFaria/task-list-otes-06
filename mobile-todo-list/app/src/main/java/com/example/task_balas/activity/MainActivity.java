@@ -6,11 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_balas.R;
+import com.example.task_balas.config.RetrofitConfig;
 import com.example.task_balas.model.Task;
 import com.example.task_balas.adapter.TaskAdapter;
+import com.example.task_balas.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        String userName = getUsername();
+//        Call<String> call =  new RetrofitConfig().getTaskService().(new User(userName));
         // Sample tasks
         taskList.add(new Task("Task 1"));
         taskList.add(new Task("Task 2"));
@@ -31,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         taskAdapter = new TaskAdapter(taskList);
         recyclerView.setAdapter(taskAdapter);
+    }
+
+    private String getUsername() {
+        Bundle extras =  getIntent().getExtras();
+        if(extras != null) {
+            return extras.getString("userName");
+        }
+        return null;
     }
 
     public void addTask(android.view.View view) {

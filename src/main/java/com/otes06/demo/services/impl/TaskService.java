@@ -3,16 +3,21 @@ package com.otes06.demo.services.impl;
 import com.otes06.demo.dtos.TaskDto;
 import com.otes06.demo.repositories.TaskRepository;
 import com.otes06.demo.services.ITaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class TaskService implements ITaskService {
+
 
     private TaskRepository repository;
 
-    public TaskService(){
-        repository = new TaskRepository();
+    @Autowired
+    public TaskService(TaskRepository repository){
+        this.repository = repository;
     }
     @Override
     public String createTask(TaskDto task) {
@@ -26,7 +31,7 @@ public class TaskService implements ITaskService {
 
     @Override
     public List<TaskDto> getTaskByUserId(String userId) {
-        return repository.getTaskByUserId(userId);
+        return repository.getTaskByUserName(userId);
     }
 
     @Override

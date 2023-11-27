@@ -1,7 +1,9 @@
 package com.otes06.demo.controllers;
 
 import com.otes06.demo.dtos.TaskDto;
+import com.otes06.demo.services.ITaskService;
 import com.otes06.demo.services.impl.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +14,11 @@ import java.util.Map;
 @RequestMapping("/task")
 public class TaskController {
 
-    private TaskService service;
+    private final ITaskService service;
 
-    public TaskController(){
-        service = new TaskService();
+    @Autowired
+    public TaskController(TaskService service){
+        this.service = service;
     }
 
     @GetMapping("/{id}")

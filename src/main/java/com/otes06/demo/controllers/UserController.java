@@ -3,6 +3,7 @@ package com.otes06.demo.controllers;
 import com.otes06.demo.dtos.UserDto;
 import com.otes06.demo.services.IUserService;
 import com.otes06.demo.services.impl.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +13,11 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    private IUserService service;
+    private final IUserService service;
 
-    public UserController(){
-        service = new UserService();
+    @Autowired
+    public UserController(UserService service){
+        this.service = service;
     }
 
     @GetMapping("/{id}")
@@ -29,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> post(@RequestBody UserDto dto){
+    public ResponseEntity<UserDto> post(@RequestBody UserDto dto){
         return ResponseEntity.ok(service.createUser(dto));
     }
 

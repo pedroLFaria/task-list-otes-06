@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskDto {
-    String description;
-    String name;
-    String userId;
+    String text;
+    int position;
+    String userName;
 }

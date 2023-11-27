@@ -5,9 +5,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_balas.R;
+import com.example.task_balas.config.RetrofitConfig;
+import com.example.task_balas.model.User;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,13 +38,30 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         String userName = nameInput.getText().toString().trim();
-
         if (!userName.isEmpty()) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            Call<String> call =  new RetrofitConfig().getUserService().userCreate(new User(userName));
+            call.enqueue(getUserCreateCallback(userName));
+
         } else {
             nameInput.setError("Please enter your name");
         }
+    }
+
+    @NonNull
+    private Callback<String> getUserCreateCallback(String userName) {
+        return new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("userName", userName);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                nameInput.setError("Erro ao tentar acessar o servidor");
+            }
+        };
     }
 }

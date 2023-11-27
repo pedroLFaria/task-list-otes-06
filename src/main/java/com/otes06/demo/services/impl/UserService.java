@@ -3,18 +3,23 @@ package com.otes06.demo.services.impl;
 import com.otes06.demo.dtos.UserDto;
 import com.otes06.demo.repositories.UserRepository;
 import com.otes06.demo.services.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Service
 public class UserService implements IUserService {
+
 
     private UserRepository repository;
 
-    public UserService(){
-        repository = new UserRepository();
+    @Autowired
+    public UserService(UserRepository repository){
+        this.repository = repository;
     }
     @Override
-    public String createUser(UserDto user) {
+    public UserDto createUser(UserDto user) {
         return repository.createUser(user);
     }
     

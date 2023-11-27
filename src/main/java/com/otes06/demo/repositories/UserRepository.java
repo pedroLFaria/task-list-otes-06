@@ -2,12 +2,13 @@ package com.otes06.demo.repositories;
 
 import com.otes06.demo.dtos.UserDto;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Data
+@Component
 public class UserRepository {
 
     private Map<String, UserDto> userTable;
@@ -18,10 +19,10 @@ public class UserRepository {
         idGenerator = new IdGenerator<>();
     }
 
-    public String createUser(UserDto UserDto){
+    public UserDto createUser(UserDto newUser){
         String newUserId = idGenerator.getRandomId(userTable);
-        userTable.put(newUserId, UserDto);
-        return newUserId;
+        userTable.put(newUserId, newUser);
+        return newUser;
     }
     
     public UserDto getUserById(String id){
