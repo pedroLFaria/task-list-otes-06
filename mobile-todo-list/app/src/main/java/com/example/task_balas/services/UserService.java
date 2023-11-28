@@ -14,6 +14,6 @@ public interface UserService {
     Call<Map<String,User>> userGet();
 
     @POST("user")
-    Call<String> userCreate(@Body User user);
+    Call<User> userCreate(@Body User user);
 
 }

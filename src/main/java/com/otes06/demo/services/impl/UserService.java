@@ -1,6 +1,7 @@
 package com.otes06.demo.services.impl;
 
 import com.otes06.demo.dtos.UserDto;
+import com.otes06.demo.entities.UserEntity;
 import com.otes06.demo.repositories.UserRepository;
 import com.otes06.demo.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,12 @@ public class UserService implements IUserService {
     }
     
     @Override
-    public UserDto getUserById(String id) {
+    public Map.Entry<String, UserEntity> getUserById(String id) {
         return repository.getUserById(id);
     }
     
     @Override
-    public Map<String, UserDto> getUsers() {
+    public Map<String, UserEntity> getUsers() {
         return repository.getUserTable();
     }
     

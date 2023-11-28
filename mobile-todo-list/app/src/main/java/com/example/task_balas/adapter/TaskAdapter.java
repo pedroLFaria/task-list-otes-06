@@ -8,16 +8,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_balas.R;
+import com.example.task_balas.config.RetrofitConfig;
 import com.example.task_balas.model.Task;
+import com.example.task_balas.services.TaskService;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class    TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     private List<Task> taskList;
+    private TaskService service;
 
-    public TaskAdapter(List<Task> taskList) {
-        this.taskList = taskList;
+    public TaskAdapter() {
+        this.taskList = new ArrayList<>();
+        this.service = new RetrofitConfig().getTaskService();
+
     }
 
     @NonNull
@@ -33,13 +43,43 @@ public class    TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>
         Task task = taskList.get(position);
         holder.taskText.setText(task.getText());
         holder.completeButton.setOnClickListener(v -> {
-            taskList.remove(task);
-            notifyDataSetChanged();
+            service.updateTask(task.getId(), task).enqueue(updateCallback(position));
         });
         holder.deleteButton.setOnClickListener(v -> {
-            taskList.remove(task);
-            notifyDataSetChanged();
+            service.deleteTask(task.getId()).enqueue(deleteCallback(task));
         });
+    }
+
+    @NonNull
+    private Callback<Task> updateCallback(int position) {
+        return new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                taskList.set(position, response.body());
+                notifyItemChanged(position);
+            }
+
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+
+            }
+        };
+    }
+
+    @NonNull
+    private Callback<Task> deleteCallback(Task task) {
+        return new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                taskList.remove(task);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+
+            }
+        };
     }
 
     @Override
@@ -58,5 +98,13 @@ public class    TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>
             completeButton = itemView.findViewById(R.id.completeButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
+    }
+
+    public List<Task> getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
     }
 }

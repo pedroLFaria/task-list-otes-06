@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         nameInput = findViewById(R.id.nameInput);
+        nameInput.setText("Joao");
         Button loginButton = findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         String userName = nameInput.getText().toString().trim();
         if (!userName.isEmpty()) {
-            Call<String> call =  new RetrofitConfig().getUserService().userCreate(new User(userName));
+            Call<User> call =  new RetrofitConfig().getUserService().userCreate(new User(userName));
             call.enqueue(getUserCreateCallback(userName));
 
         } else {
@@ -48,10 +49,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private Callback<String> getUserCreateCallback(String userName) {
-        return new Callback<String>() {
+    private Callback<User> getUserCreateCallback(String userName) {
+        return new Callback<User>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("userName", userName);
                 startActivity(intent);
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 nameInput.setError("Erro ao tentar acessar o servidor");
             }
         };
