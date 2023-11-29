@@ -3,6 +3,7 @@ package com.example.task_balas.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -61,12 +62,12 @@ public class MainActivity extends AppCompatActivity {
             result -> {
 
                 if (result.getResultCode() != Activity.RESULT_OK) {
-                    //TODO Tratar caso de erro
+                    Log.e("Error", "Activity result is not OK");
                     return;
                 }
                 Intent intent = result.getData();
                 if (intent == null) {
-                    //TODO caso venha sem intent
+                    Log.e("Error", "Intent is null");
                     return;
                 }
                 Task newTask = (Task) intent.getSerializableExtra("task");

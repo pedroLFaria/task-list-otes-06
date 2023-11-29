@@ -13,11 +13,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp">
-        <ImageButton
+
+        <CheckBox
             android:id="@+id/completeButton"
-            android:layout_width="36dp"
-            android:layout_height="40dp"
-            android:src="@drawable/baseline_check_24" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.35"
+            android:scaleY="1.35" />
         <TextView
             android:id="@+id/taskText"
             android:layout_width="0dp"
@@ -28,11 +30,12 @@
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="Task Name" />
+
         <ImageButton
             android:id="@+id/deleteButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/baseline_delete_24"
-            android:background="@android:color/transparent" />
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:src="@drawable/baseline_delete_24" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

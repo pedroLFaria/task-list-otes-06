@@ -2,6 +2,7 @@ package com.example.task_balas.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -42,7 +43,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Task task = taskList.get(position);
         holder.taskText.setText(task.getText());
+        holder.completeButton.setChecked(task.isCompleted());
         holder.completeButton.setOnClickListener(v -> {
+            task.setCompleted(!task.isCompleted());
             service.updateTask(task.getId(), task).enqueue(updateCallback(position));
         });
         holder.deleteButton.setOnClickListener(v -> {
@@ -89,7 +92,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView taskText;
-        ImageButton completeButton;
+        CheckBox completeButton;
         ImageButton deleteButton;
 
         public ViewHolder(@NonNull View itemView) {
