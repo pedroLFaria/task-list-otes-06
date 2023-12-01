@@ -17,6 +17,6 @@ Aplicativo feito para a disciplina de Dispositivos Móveis, da Universidade do E
 
 ## Instalação Mobile
 1. Instalar Android Studio.
-2. Instalar SDK do Android 11 ou superior.
+2. Instalar SDK 33 ou superior.
 3. Instalar um dispositivo para emular a aplicação.
 4. Rodar o app.
